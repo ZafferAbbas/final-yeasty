@@ -59,38 +59,38 @@
 // }
 
 
-import { userSignUp, userSignIn, userSignOut, userEditProfile, requestPasswordReset, resetPassword, changePassword, inviteSubUser, toggleSubUserStatus, getUserInfo, verifyToken } from '@/backend/Controller/UserAuthController';
-import { authCheck } from '@/backend/Middleware/Auth';
-import { connect } from '@/backend/database/dbConfig';
-import { NextResponse, NextRequest } from 'next/server';
+// import { userSignUp, userSignIn, userSignOut, userEditProfile, requestPasswordReset, resetPassword, changePassword, inviteSubUser, toggleSubUserStatus, getUserInfo, verifyToken } from '@/backend/Controller/UserAuthController';
+// import { authCheck } from '@/backend/Middleware/Auth';
+// import { connect } from '@/backend/database/dbConfig';
+// import { NextResponse, NextRequest } from 'next/server';
 
-console.log("WOWOWWW")
+// console.log("WOWOWWW")
 
-export async function POST(req: NextRequest) {
-    console.log("hello world")
-    await connect();
+// export async function POST(req: NextRequest) {
+//     console.log("hello world")
+//     await connect();
   
-    const path = req.url?.split('?')[0];
-    console.log(req.url)
-    console.log(path)
+//     const path = req.url?.split('?')[0];
+//     console.log(req.url)
+//     console.log(path)
   
-    if (path?.endsWith('/userSignUp')) {
-      await userSignUp(req);
-    } else if (path?.endsWith('/userSignIn')) {
-        console.log("wowww")
-      await userSignIn(req);
-    } else if (path?.endsWith('/userSignOut')) {
-      await userSignOut(req);
-    } else if (path?.endsWith('/requestPasswordReset')) {
-      await requestPasswordReset(req);
-    } else if (path?.endsWith('/inviteSubUser')) {
-      await authCheck(inviteSubUser)(req);
-    } else if (path?.endsWith('/getUserInfo')) {
-      await authCheck(getUserInfo)(req);
-    } else if (path?.endsWith('/verifyToken')) {
-      await verifyToken(req);
-    } else {
-        console.log("wow")
-    //   res.status(405).json({ message: 'Method Not Allowed' });
-    }
-  }
+//     if (path?.endsWith('/userSignUp')) {
+//       await userSignUp(req);
+//     } else if (path?.endsWith('/userSignIn')) {
+//         console.log("wowww")
+//       await userSignIn(req);
+//     } else if (path?.endsWith('/userSignOut')) {
+//       await userSignOut(req);
+//     } else if (path?.endsWith('/requestPasswordReset')) {
+//       await requestPasswordReset(req);
+//     } else if (path?.endsWith('/inviteSubUser')) {
+//       await authCheck(inviteSubUser)(req);
+//     } else if (path?.endsWith('/getUserInfo')) {
+//       await authCheck(getUserInfo)(req);
+//     } else if (path?.endsWith('/verifyToken')) {
+//       await verifyToken(req);
+//     } else {
+//         console.log("wow")
+//     //   res.status(405).json({ message: 'Method Not Allowed' });
+//     }
+//   }
