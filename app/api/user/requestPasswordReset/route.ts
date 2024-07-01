@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         if (!user) {
         return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
-    
+
         const resetToken = jwt.sign({ id: user._id }, process.env.JET_SECREAT, { expiresIn: "1h" });
     
         const transporter = nodemailer.createTransport({
