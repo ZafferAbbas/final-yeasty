@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export async function connect() {
     try {
-        mongoose.connect(`mongodb+srv://zohaibhassan22002:${process.env.DATABASE_PASSWORD}@cluster0.xzn1q5f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+        mongoose.connect(`mongodb+srv://zohaibhassan22002:zohaib02@cluster0.xzn1q5f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
 
         {
             useNewUrlParser: false,
