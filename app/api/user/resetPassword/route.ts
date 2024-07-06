@@ -2,6 +2,7 @@ import { connect } from '@/backend/database/dbConfig';
 import { NextResponse, NextRequest } from 'next/server';
 import UserAuthModal from "@/backend/Model/UserAuthModal";
 const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
 
 
 export async function PUT(request: NextRequest) {
@@ -20,7 +21,9 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ message: "User not found" }, );
         }
     
-        user.password = newPassword;
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+
         await user.save();
         return NextResponse.json({ message: "Password reset successfully" });
   
