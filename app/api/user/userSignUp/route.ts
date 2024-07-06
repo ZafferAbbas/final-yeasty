@@ -1,7 +1,7 @@
 import { connect } from '@/backend/database/dbConfig';
 import { NextResponse, NextRequest } from 'next/server';
 import UserAuthModal from "@/backend/Model/UserAuthModal";
-
+import bcrypt from 'bcryptjs';
 
 export async function POST(request: NextRequest) {
     try {
@@ -18,11 +18,14 @@ export async function POST(request: NextRequest) {
             status: 400,
           });
         }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
     
         const newUser = new UserAuthModal({
           fullName,
           email,
-          password,
+          password: hashedPassword,
           companyName,
           hearFrom,
         });
@@ -38,11 +41,10 @@ export async function POST(request: NextRequest) {
     }
     catch (error) {
         console.log(error);
-        NextResponse.json({
+        return NextResponse.json({
           message: "Something went wrong",
         },{
           status: 500,
         });
     }
-    
 }
