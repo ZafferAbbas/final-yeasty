@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SideMenu from "@/components/sideMenu";
 import TopNavbar from "@/components/topnavbar";
 import MainContent from "@/components/maincontent";
@@ -33,6 +33,10 @@ function Settings() {
   const [subUsers, setSubUsers] = useState([]);
   const [inviteEmail, setInviteEmail] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const currentPasswordRef = useRef(null);
+  const newPasswordRef = useRef(null);
+  const confirmNewPasswordRef = useRef(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -162,6 +166,12 @@ function Settings() {
       }
     } catch (error) {
       toast.error("Error updating sub-user status");
+    }
+  };
+
+  const togglePasswordVisibility = (ref) => {
+    if (ref.current) {
+      ref.current.type = ref.current.type === "password" ? "text" : "password";
     }
   };
 
@@ -326,29 +336,53 @@ function Settings() {
                   <div className="text-white mb-4">
                     <p className="text-xs font-bold mb-2">Current Password</p>
                     <input
+                      ref={currentPasswordRef}
                       className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-4 py-3 text-xs"
                       placeholder="Current Password"
+                      type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
+                    <button
+                      className="text-xs text-blue-500 mt-1"
+                      onClick={() => togglePasswordVisibility(currentPasswordRef)}
+                    >
+                      Show Password
+                    </button>
                   </div>
                   <div className="text-white mb-4">
                     <p className="text-xs font-bold mb-2">New Password</p>
                     <input
+                      ref={newPasswordRef}
                       className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-4 py-3 text-xs"
                       placeholder="New Password"
+                      type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                     />
+                    <button
+                      className="text-xs text-blue-500 mt-1"
+                      onClick={() => togglePasswordVisibility(newPasswordRef)}
+                    >
+                      Show Password
+                    </button>
                   </div>
                   <div className="text-white mb-4">
                     <p className="text-xs font-bold mb-2">Confirm New Password</p>
                     <input
+                      ref={confirmNewPasswordRef}
                       className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-4 py-3 text-xs"
                       placeholder="Confirm New Password"
+                      type="password"
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
                     />
+                    <button
+                      className="text-xs text-blue-500 mt-1"
+                      onClick={() => togglePasswordVisibility(confirmNewPasswordRef)}
+                    >
+                      Show Password
+                    </button>
                   </div>
                   <div>
                     <p className="text-lg font-bold text-white mb-2">Password requirements</p>
