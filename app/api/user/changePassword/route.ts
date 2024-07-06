@@ -2,6 +2,7 @@ import { connect } from '@/backend/database/dbConfig';
 import { NextResponse, NextRequest } from 'next/server';
 import UserAuthModal from "@/backend/Model/UserAuthModal";
 const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
 
 
 export async function PUT(request: NextRequest) {
@@ -27,12 +28,14 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
     
-        const isMatch = currentPassword === user.password;
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
         return NextResponse.json({ message: "Old password is incorrect" }, { status: 400 });
         }
     
-        user.password = newPassword;
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        
         await user.save();
         return NextResponse.json({ message: "Password changed successfully" }, { status: 200 });
   
