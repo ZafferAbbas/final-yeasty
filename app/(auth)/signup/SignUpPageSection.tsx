@@ -9,10 +9,7 @@ const metadata = {
 import { signUp } from '../../../lib/services/userAuth'
 import Link from 'next/link'
 import AuthLogo from '../auth-logo'
-// import { BaseUrl } from "../../../constants/Constants"
 import { useRouter } from 'next/navigation';
-
-
 
 export default function SignUpPageSection() {
   const [formFields, setFormFields] = useState({
@@ -22,11 +19,9 @@ export default function SignUpPageSection() {
     password: "",
     hearAbout: "Google",
     loading: false
-  })
+  });
 
-
-const router = useRouter();
-
+  const router = useRouter();
 
   const SignUpHandler = async (): Promise<void> => {
     if (
@@ -48,8 +43,9 @@ const router = useRouter();
           hearFrom: formFields.hearAbout,
         });
 
-        if (response.data.status === 'error') {
+        if (response.status === 400 && response.data.status === 'error') {
           toast.error(response.data.message);
+          setFormFields({ ...formFields, loading: false });
         } else {
           toast.success(response.data.message);
           setFormFields({
@@ -63,14 +59,23 @@ const router = useRouter();
 
           router.push('/signin');
         }
-      } catch (error) {
-        toast.error('Something went wrong. Please try again.');
+      } catch (error: any) {
+        if (error.response && error.response.status === 400 && error.response.data.status === 'error') {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Something went wrong. Please try again.');
+        }
         setFormFields({ ...formFields, loading: false });
       }
     }
   };
 
-  
+  const onSignUp = async (e: any) => {
+    e.preventDefault();
+    if (!formFields.loading) {
+      SignUpHandler();
+    }
+  };
 
   return (
     <>
@@ -88,8 +93,7 @@ const router = useRouter();
 
       {/* Form */}
       <div className="max-w-sm mx-auto">
-
-        <form onSubmit={SignUpHandler}>
+        <form onSubmit={onSignUp}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm text-slate-300 font-medium mb-1" htmlFor="company">Company <span className="text-rose-500">*</span></label>
@@ -101,7 +105,7 @@ const router = useRouter();
                     companeyName: e.target.value
                   })
                 }}
-                id="company" className="form-input w-full" type="text" placeholder="mE.g., Acme Inc." required />
+                id="company" className="form-input w-full" type="text" placeholder="E.g., Acme Inc." required />
             </div>
             <div>
               <label className="block text-sm text-slate-300 font-medium mb-1" htmlFor="full-name">Full Name <span className="text-rose-500">*</span></label>
@@ -157,16 +161,12 @@ const router = useRouter();
             </div>
           </div>
           <div className="mt-6 ">
-
-            <div
-              onClick={() => {
-                // toast.success('My success toast');
-                SignUpHandler()
-              }}
-              // onClick={SignUpHandler}
-              className="btn text-sm text-white bg-purple-500 hover:bg-purple-600 w-full shadow-sm group">
-              Sign Up
-            </div>
+            <button
+              type="submit"
+              disabled={formFields.loading}
+              className={`btn text-sm text-white bg-purple-500 hover:bg-purple-600 w-full shadow-sm group ${formFields.loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              {formFields.loading ? 'Signing Up...' : 'Sign Up'}
+            </button>
           </div>
         </form>
 
